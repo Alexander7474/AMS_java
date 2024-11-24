@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Vector;
 
+import partB.Taille;
+
 public class Corpus extends Vector<Document> {
 	private static final long serialVersionUID = 1L;
 	private String title;
@@ -65,6 +67,10 @@ public class Corpus extends Vector<Document> {
 		}
 		
 		return finalStr;
+	}
+	
+	public int taille(Taille t) {
+		return t.calculer(this);
 	}
 	
 }
