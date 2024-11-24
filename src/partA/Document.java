@@ -31,4 +31,17 @@ public class Document extends ArrayList<Mot>{
 		
 		return finalStr;
 	}
+	
+	public Mot getMot(int i) {
+		return this.get(i);
+	}
+	
+	public boolean isInDoc(Mot m) {
+		for(int i = 0; i < this.size(); i++) {
+			if(m.equals(this.getMot(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

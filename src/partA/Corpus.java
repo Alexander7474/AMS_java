@@ -73,4 +73,8 @@ public class Corpus extends Vector<Document> {
 		return t.calculer(this);
 	}
 	
+	public Document getDoc(int i) {
+		return this.get(i);
+	}
+	
 }

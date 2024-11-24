@@ -29,10 +29,17 @@ public class Vocabulary {
 		Integer cnt = 0;
 		for(int i = 0; i < c.size(); i++) {
 			for(int y = 0; y < c.get(i).size(); y++) {
-				map.put(c.get(i).get(y), cnt);
-				cnt++;
+				if(!map.containsKey(c.get(i).get(y))) {
+					map.put(c.get(i).get(y), cnt);
+					cnt++;
+				}
+				
 			}
 		}
+	}
+	
+	public HashMap<Mot, Integer> getHashMap(){
+		return map;
 	}
 	
 	public String toString() {
