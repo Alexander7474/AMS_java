@@ -42,6 +42,10 @@ public class Vocabulary {
 		return map;
 	}
 	
+	public int getSize() {
+		return map.size();
+	}
+	
 	public String toString() {
 		String finalStr = "";
 		

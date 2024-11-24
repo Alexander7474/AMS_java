@@ -9,7 +9,7 @@ public class Test {
 		Corpus c = new Corpus("src/booksummaries_sample.txt", DataSets.BOOK);
 		TfIdf t = new TfIdf();
 		TfIdf t2 = t.processCorpus(c);
-		System.out.println(t2);
+		t2.processQuery("The story is presented by Le Fanu", 3);
 	}
 
 }

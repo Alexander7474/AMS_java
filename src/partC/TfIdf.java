@@ -8,6 +8,7 @@ import partB.TailleDocument;
 public class TfIdf {
 	private HashMap<Document, double[]> tf;
 	private double[] idf;
+	private HashMap<Document, double[]> tfIdf;
 	private Vocabulary voc;
 	
 	private TfIdf(Vocabulary v) {
@@ -18,12 +19,14 @@ public class TfIdf {
 		}
 		
 		tf = new HashMap<Document, double[]>();
+		tfIdf = new HashMap<Document, double[]>();
 	}
 	
 	public TfIdf() {
 		this.voc = Vocabulary.createVocabulary();
 		
 		tf = new HashMap<Document, double[]>();
+		tfIdf = new HashMap<Document, double[]>();
 	}
 	
 	private void vocabulaire(Corpus c) {
@@ -31,7 +34,7 @@ public class TfIdf {
 	}
 	
 	private void calcIdf(Corpus c) {
-		this.idf = new double[voc.getHashMap().size()];	
+		this.idf = new double[voc.getSize()];	
 		
 		for(Mot m : voc.getHashMap().keySet()) {
 			int docMotCnt = 0;
@@ -65,28 +68,100 @@ public class TfIdf {
 		}
 	}
 	
-	public TfIdf processCorpus(Corpus c) {
-		TfIdf tf = new TfIdf(voc);
-		
-		tf.vocabulaire(c);
-		tf.calcTf(c);
-		tf.calcIdf(c);
-		
-		return tf;
+	private void calcTfIdf() {
+		for(Document d : tf.keySet()) {
+			double[] tfIdfVec = new double[voc.getSize()];
+			for(int i = 0; i < voc.getSize(); i++) {
+				tfIdfVec[i] = tf.get(d)[i] * idf[i];
+			}
+			tfIdf.put(d, tfIdfVec);
+		}
 	}
 	
-	public void processQuery(String request, int maxDoxToShow) {
+	public TfIdf processCorpus(Corpus c) {
+		TfIdf finalTfIdf = new TfIdf(voc);
+		
+		finalTfIdf.vocabulaire(c);
+		finalTfIdf.calcTf(c);
+		finalTfIdf.calcIdf(c);
+		finalTfIdf.calcTfIdf();
+		
+		return finalTfIdf;
+	}
+	
+	public void processQuery(String request, int maxDocToShow) {
+		double[] requestVec = features(request);
+		double[] requestTfIdfVec = new double[voc.getSize()];
+		for(int i = 0; i < voc.getSize(); i++) {
+			requestTfIdfVec[i] = requestVec[i] * idf[i];
+			//if(requestTfIdfVec[i] != 0.0) System.out.println(requestTfIdfVec[i]);
+		}
+		
+		HashMap<Document, Double> scoresDocs = new HashMap<Document, Double>();
+		
+		for(Document d : tf.keySet()) {
+			double produitScalaire = 0.0;
+			double normeR = 0.0;
+			double normeD = 0.0;
+			for(int i = 0; i<requestTfIdfVec.length; i++) {
+				produitScalaire += requestTfIdfVec[i] * tfIdf.get(d)[i];
+				normeR += requestTfIdfVec[i];
+				normeD += tfIdf.get(d)[i];
+			}
+			
+			normeR = Math.sqrt(normeR);
+			normeD = Math.sqrt(normeD);
+			
+			double finalScore = produitScalaire / (normeD * normeR);
+			
+			scoresDocs.put(d, finalScore);
+			
+		}
+		
+		System.out.println("Document trié par pertinence :\n");
+		for(int i = 1; i <= maxDocToShow; i++) {
+			double maxScore = 0.0;
+			Document docToShow = null;
+			
+			for(Document d : scoresDocs.keySet()) {
+				if(scoresDocs.get(d) > maxScore) {
+					maxScore = scoresDocs.get(d);
+					docToShow = d;
+				}
+				
+			}
+			
+			System.out.println("Document " + i + ":\n");
+			System.out.println(docToShow);
+			System.out.println("\n");
+			scoresDocs.remove(docToShow);
+		}
+		
+		
+	
 		
 	}
 	
 	private double[] features(String request) {
-		String[] splittedRequest = request.split("");
-		double[] vec = new double[splittedRequest.length];
+		//on sépare la requete
+		String[] splittedRequest = request.split(" ");
+		double[] vec = new double[voc.getSize()];
 		
-		for(String m : splittedRequest) {
-			
+		//on calcule la fréquence de chaque mot dans notre vocabulaire
+		for(String w : splittedRequest) {
+			Mot m = new Mot(w);
+			if(voc.getHashMap().containsKey(m)) {
+				vec[voc.getHashMap().get(m)] += 1.0;
+			}
 		}
 		
+		for(int i = 0; i < vec.length; i++) {
+			if(vec[i] > 0.0) {
+				vec[i] /= splittedRequest.length;
+			}
+			
+		}
+
 		return vec;
 	}
 	
