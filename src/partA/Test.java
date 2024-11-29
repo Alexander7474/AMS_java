@@ -11,5 +11,4 @@ public class Test {
 		TfIdf t2 = t.processCorpus(c);
 		t2.processQuery("The story is presented by Le Fanu", 3);
 	}
-
 }
