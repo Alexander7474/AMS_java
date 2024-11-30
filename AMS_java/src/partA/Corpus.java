@@ -15,7 +15,7 @@ public class Corpus extends Vector<Document>  {
 	private String title;
 	private EngineVoc engine;
 	
-	public EngineVoc getFeatures(EngineVoc engineToUse) {
+	public EngineVoc getFeatures(EngineVoc engineToUse) throws MoteurRechercheExc {
 		if(engine == null) {
 			return engineToUse.processCorpus(this);
 		}else {
@@ -23,7 +23,7 @@ public class Corpus extends Vector<Document>  {
 		}
 	}
 
-	public Corpus(String title, DataSets docType)throws CorpusExc {
+	public Corpus(String title, DataSets docType)throws MoteurRechercheExc  {
 		super();
 		this.title = title;
 		if(title==null) {

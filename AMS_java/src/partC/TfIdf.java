@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import partA.*;
 import partB.TailleDocument;
+import partE.MoteurRechercheExc;
+import partE.TfidfExc;
 
 public class TfIdf extends EngineVoc{
 	private HashMap<Document, double[]> tf;
@@ -25,6 +27,7 @@ public class TfIdf extends EngineVoc{
 	}
 	
 	private void calcIdf(Corpus c) {
+		
 		this.idf = new double[getVoc().getSize()];	
 		
 		for(Mot m : getVoc().getHashMap().keySet()) {
@@ -40,7 +43,12 @@ public class TfIdf extends EngineVoc{
 		
 	}
 	
-	private void calcTf(Corpus c) {
+	private void calcTf(Corpus c) throws MoteurRechercheExc{
+		if(c==null) {
+			throw new TfidfExc("the corpus dosn t exist");
+		}else if(c.size()==0) {
+			throw new TfidfExc("the corpus is empty");
+		}
 		for(int i = 0; i < c.taille(new TailleDocument()); i++) {
 			double[] vec = new double[getVoc().getHashMap().size()];
 			for(Mot m : getVoc().getHashMap().keySet()) {
@@ -69,7 +77,7 @@ public class TfIdf extends EngineVoc{
 		}
 	}
 	
-	public TfIdf processCorpus(Corpus c) {
+	public TfIdf processCorpus(Corpus c) throws MoteurRechercheExc {
 		TfIdf finalTfIdf = new TfIdf(getVoc());
 		
 		finalTfIdf.vocabulaire(c);

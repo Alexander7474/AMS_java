@@ -3,6 +3,8 @@ package partC;
 import java.util.HashMap;
 import partA.*;
 import partB.*;
+import partE.Bm25Exc;
+import partE.MoteurRechercheExc;
 
 
 
@@ -93,7 +95,10 @@ public class Bm25 extends EngineVoc {
     }
 
     //processQuery permet d'afficher les document par ordre de score grace a la fonction calcbm25
-    public void processQuery(String request, int maxDocToShow) {
+    public void processQuery(String request, int maxDocToShow)throws MoteurRechercheExc {
+    	if(request==null) {
+    		throw new Bm25Exc("the request do not exist");
+    	}
         calcBm25Scores(request);
 
         System.out.println("Documents triés par pertinence (BM25) :\n");
