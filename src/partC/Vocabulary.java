@@ -5,11 +5,18 @@ import java.util.HashSet;
 
 import partA.*;
 
+/**
+ * @author Alexandre LANTERNIER
+ */
 public class Vocabulary {
 	private static boolean alreadyExist = false;
 	private HashMap<Mot, Integer> map;
 	private HashSet<Mot> stopList;
 
+	/**
+	 * @brief Créer l'unique instance de Vocabulaire
+	 * @return
+	 */
 	public static Vocabulary createVocabulary() {
 		if(! alreadyExist) {
 			alreadyExist = true;
@@ -25,12 +32,16 @@ public class Vocabulary {
 		stopList = new HashSet<Mot>();
 	}
 	
+	/**
+	 * @brief rajoute un corpus au vocabulaire
+	 * @param c
+	 */
 	public void addCorpus(Corpus c) {
 		Integer cnt = 0;
 		for(int i = 0; i < c.size(); i++) {
 			for(int y = 0; y < c.get(i).size(); y++) {
 				Mot m = c.get(i).get(y);
-				if(!map.containsKey(m) && !stopList.contains(m)) { // onverifie que le mot n'est pas déja dans le vocabulaire et n'est pas dans la stop list
+				if(!map.containsKey(m) && !stopList.contains(m)) { // on verifie que le mot n'est pas déja dans le voc et n'est pas dans la stopList
 					map.put(c.get(i).get(y), cnt);
 					cnt++;
 				}

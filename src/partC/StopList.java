@@ -8,7 +8,16 @@ import java.util.Vector;
 import partA.Document;
 import partA.Mot;
 
+/**
+ * @brief Gère un stopList 
+ * @author Alexandre LANTERNIER
+ */
 public class StopList extends HashSet<Mot>{
+	
+	/**
+	 * @brief Construit 
+	 * @param filePath
+	 */
 	public StopList(String filePath) {
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String l;

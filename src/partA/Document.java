@@ -3,6 +3,10 @@ package partA;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * @brief Class Document 
+ * @author Alexandre LANTERNIER
+ */
 public class Document extends ArrayList<Mot>{
 	private static final long serialVersionUID = 1L;
 	private String title;
@@ -12,10 +16,19 @@ public class Document extends ArrayList<Mot>{
 		this.title = title;
 	}
 	
+	/**
+	 * @brief Rajoute un mot dans le Doc
+	 * @param m
+	 */
 	public void putMot(Mot m) {
 		this.add(m);
 	}
 	
+	
+	/**
+	 * @brief rajout un mot dans le doc à partir d'une String
+	 * @param m
+	 */
 	public void putMot(String m) {
 		Mot newMot = new Mot(m);
 		this.add(newMot);
@@ -33,10 +46,20 @@ public class Document extends ArrayList<Mot>{
 		return finalStr;
 	}
 	
+	/**
+	 * @brief renvoie le mot i
+	 * @param i
+	 * @return
+	 */
 	public Mot getMot(int i) {
 		return this.get(i);
 	}
 	
+	/**
+	 * @brief vérifie si un mot est dans le document
+	 * @param m
+	 * @return
+	 */
 	public boolean isInDoc(Mot m) {
 		for(int i = 0; i < this.size(); i++) {
 			if(m.equals(this.getMot(i))) {
@@ -44,13 +67,5 @@ public class Document extends ArrayList<Mot>{
 			}
 		}
 		return false;
-	}
-	
-	public int sizeStopList(HashSet<Mot> stopList) {
-		int cnt = 0;
-		for(Mot m : this) {
-			if(!stopList.contains(m)) cnt++;
-		}
-		return cnt;
 	}
 }

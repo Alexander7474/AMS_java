@@ -5,11 +5,18 @@ import java.util.HashMap;
 import partA.*;
 import partB.TailleDocument;
 
+/**
+ * @author Alexandre LANTERNIER
+ */
 public class TfIdf extends EngineVoc{
 	private HashMap<Document, double[]> tf;
 	private double[] idf;
 	private HashMap<Document, double[]> tfIdf;
 	
+	/**
+	 * @brief Créer Tfidf avec un vocabulaire
+	 * @param v
+	 */
 	private TfIdf(Vocabulary v) {
 		super(v);
 		
@@ -17,6 +24,9 @@ public class TfIdf extends EngineVoc{
 		tfIdf = new HashMap<Document, double[]>();
 	}
 	
+	/**
+	 * @brief Créer Tfidf sans un vocabulaire
+	 */
 	public TfIdf() {
 		super();
 		
@@ -24,6 +34,10 @@ public class TfIdf extends EngineVoc{
 		tfIdf = new HashMap<Document, double[]>();
 	}
 	
+	/**
+	 * @brief calcule le poid idf des mots dans le vocabulaire 
+	 * @param c
+	 */
 	private void calcIdf(Corpus c) {
 		this.idf = new double[getVoc().getSize()];	
 		
@@ -40,6 +54,10 @@ public class TfIdf extends EngineVoc{
 		
 	}
 	
+	/**
+	 * @brief calcule le poid tf des mots de chaque document
+	 * @param c
+	 */
 	private void calcTf(Corpus c) {
 		for(int i = 0; i < c.taille(new TailleDocument()); i++) {
 			double[] vec = new double[getVoc().getHashMap().size()];
@@ -59,6 +77,9 @@ public class TfIdf extends EngineVoc{
 		}
 	}
 	
+	/**
+	 * @brief calcule le poid tfidf de chaque mots
+	 */
 	private void calcTfIdf() {
 		for(Document d : tf.keySet()) {
 			double[] tfIdfVec = new double[getVoc().getSize()];
@@ -69,6 +90,9 @@ public class TfIdf extends EngineVoc{
 		}
 	}
 	
+	/**
+	 * @brief Créé une instance de TfIdf avec un corpus
+	 */
 	public TfIdf processCorpus(Corpus c) {
 		TfIdf finalTfIdf = new TfIdf(getVoc());
 		
@@ -80,6 +104,12 @@ public class TfIdf extends EngineVoc{
 		return finalTfIdf;
 	}
 	
+	/**
+	 * @brief Détermine les document les plus pertinent pour contenir les mots de la requête
+	 * @param request
+	 * @param maxDocToShow
+	 * @return
+	 */
 	public void processQuery(String request, int maxDocToShow) {
 		double[] requestVec = features(request);
 		double[] requestTfIdfVec = new double[getVoc().getSize()];
@@ -130,6 +160,11 @@ public class TfIdf extends EngineVoc{
 		
 	}
 	
+	/**
+	 * @brief détermien le poid tf de chaque mot de la requête
+	 * @param request
+	 * @return
+	 */
 	private double[] features(String request) {
 		//on sépare la requete
 		String[] splittedRequest = request.split(" ");
@@ -159,14 +194,16 @@ public class TfIdf extends EngineVoc{
 		return finalStr;
 	}
 	
-	
-	//------------------------------------------------------------------------------------------------------------------------------------------------------
-	//UTILISE LA STOPLIST DANS VOCABULARY LORS DE L'AJOUT DES CORPUS 
-	
-	public TfIdf processCorpusWithStopList(Corpus c,StopList stopList) {
+	/**
+	 * @brief Créé une instance de TfIdf avec un corpus et une stoplist
+	 * @param c
+	 * @param stopList
+	 * @return
+	 */
+	public TfIdf processCorpus(Corpus c,StopList stopList) {
 		TfIdf finalTfIdf = new TfIdf(getVoc());
 		
-		finalTfIdf.vocabulaireWithStopList(c, stopList);
+		finalTfIdf.vocabulaire(c, stopList);
 		finalTfIdf.calcTf(c);
 		finalTfIdf.calcIdf(c);
 		finalTfIdf.calcTfIdf();

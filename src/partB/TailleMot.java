@@ -2,6 +2,9 @@ package partB;
 
 import partA.Corpus;
 
+/**
+ * @author Yassine EL-MSEBLI
+ */
 public class TailleMot extends Taille{
 	
 	public int calculer(Corpus taille) {
