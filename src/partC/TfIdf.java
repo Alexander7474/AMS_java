@@ -159,4 +159,19 @@ public class TfIdf extends EngineVoc{
 		return finalStr;
 	}
 	
+	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------
+	//UTILISE LA STOPLIST DANS VOCABULARY LORS DE L'AJOUT DES CORPUS 
+	
+	public TfIdf processCorpusWithStopList(Corpus c,StopList stopList) {
+		TfIdf finalTfIdf = new TfIdf(getVoc());
+		
+		finalTfIdf.vocabulaireWithStopList(c, stopList);
+		finalTfIdf.calcTf(c);
+		finalTfIdf.calcIdf(c);
+		finalTfIdf.calcTfIdf();
+		
+		return finalTfIdf;
+	}
+	
 }

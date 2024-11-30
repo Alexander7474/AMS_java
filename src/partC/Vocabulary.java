@@ -9,7 +9,7 @@ public class Vocabulary {
 	private static boolean alreadyExist = false;
 	private HashMap<Mot, Integer> map;
 	private HashSet<Mot> stopList;
-	
+
 	public static Vocabulary createVocabulary() {
 		if(! alreadyExist) {
 			alreadyExist = true;
@@ -29,7 +29,8 @@ public class Vocabulary {
 		Integer cnt = 0;
 		for(int i = 0; i < c.size(); i++) {
 			for(int y = 0; y < c.get(i).size(); y++) {
-				if(!map.containsKey(c.get(i).get(y))) {
+				Mot m = c.get(i).get(y);
+				if(!map.containsKey(m) && !stopList.contains(m)) { // onverifie que le mot n'est pas déja dans le vocabulaire et n'est pas dans la stop list
 					map.put(c.get(i).get(y), cnt);
 					cnt++;
 				}
@@ -54,6 +55,15 @@ public class Vocabulary {
 		}
 		
 		return finalStr;
+	}
+	
+	
+	public HashSet<Mot> getStopList() {
+		return stopList;
+	}
+
+	public void addStopList(StopList stopList) {
+		this.stopList.addAll((HashSet<Mot>) stopList);
 	}
 	
 }

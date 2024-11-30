@@ -1,6 +1,7 @@
 package partA;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Document extends ArrayList<Mot>{
 	private static final long serialVersionUID = 1L;
@@ -43,5 +44,13 @@ public class Document extends ArrayList<Mot>{
 			}
 		}
 		return false;
+	}
+	
+	public int sizeStopList(HashSet<Mot> stopList) {
+		int cnt = 0;
+		for(Mot m : this) {
+			if(!stopList.contains(m)) cnt++;
+		}
+		return cnt;
 	}
 }

@@ -29,4 +29,9 @@ public abstract class EngineVoc {
 	public void vocabulaire(Corpus c) {
 		this.voc.addCorpus(c);
 	}
+	
+	public void vocabulaireWithStopList(Corpus c, StopList stopList) {
+		this.voc.addStopList(stopList);
+		this.voc.addCorpus(c);
+	}
 }
