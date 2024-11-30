@@ -1,19 +1,40 @@
 package partA;
 
+import partE.*;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.Vector;
 
 import partB.Taille;
+import partC.EngineVoc;
 
-public class Corpus extends Vector<Document> {
+public class Corpus extends Vector<Document>  {
 	private static final long serialVersionUID = 1L;
 	private String title;
+	private EngineVoc engine;
+	
+	public EngineVoc getFeatures(EngineVoc engineToUse) {
+		if(engine == null) {
+			return engineToUse.processCorpus(this);
+		}else {
+			return engine;
+		}
+	}
 
-	public Corpus(String title, DataSets docType) {
+	public Corpus(String title, DataSets docType)throws CorpusExc {
 		super();
 		this.title = title;
-		
+		if(title==null) {
+			throw new CorpusExc("the title do not exist");
+		}
+        File file = new File(title);
+        if (!file.exists() || !file.isFile()) {
+            throw new CorpusExc("the file does not exist: " + title);
+        }else if(file.length()==0) {
+        	throw new CorpusExc("the file is empty: " + title);
+        }
 		String separator;
 		int p1;
 		int p2;
