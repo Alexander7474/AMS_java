@@ -3,6 +3,7 @@ package partA;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Vector;
+import java.io.File;
 
 import partB.Taille;
 
@@ -13,7 +14,15 @@ public class Corpus extends Vector<Document> {
 	public Corpus(String title, DataSets docType) {
 		super();
 		this.title = title;
-		
+		if(title==null) {
+			throw new CorpusExc("the title do not exist");
+		}
+	        File file = new File(title);
+	        if (!file.exists() || !file.isFile()) {
+	            throw new CorpusExc("the file does not exist: " + title);
+	        }else if(file.length()==0) {
+	        	throw new CorpusExc("the file is empty: " + title);
+	        }
 		String separator;
 		int p1;
 		int p2;
