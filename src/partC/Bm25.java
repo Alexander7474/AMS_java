@@ -4,31 +4,24 @@ import java.util.HashMap;
 import partA.*;
 import partB.*;
 
-/**
- * @todo Changer les nom de tf et idf (ON EST DANS LA CLASS Bm25, t'aurais pu faire un effort et je ne sais même pas si idf sert a quelque chose)
- * @todo Bm25Score n'est pas un attribut mais dois être une instance de la méthode processQuery
- * @todo Changer le nom des méthodes calc (PUTAIN T'A VRAIMENT PAS FAIT D'EFFORT)
- * @todo Écrire la javadoc des méthode(oublie de préciser qu t l'auteur)
- * @todo Gérer la réduction de vocabulaire 
- * @vatefaire j'ai du faire l'héritage avec EngineVoc moi même sinon ta class était useless
- */
+
 
 public class Bm25 extends EngineVoc {
-    private HashMap<Document, double[]> tf;          
-    private double[] idf;                            
-    private HashMap<Document, Double> bm25Scores;                             
-    private double avgDL;                            
+    private HashMap<Document, double[]> tf;      	// Term Frequencie : permet  davoir la frequence de chaque terme du vocabulaire pour whque document
+    private double[] idfBm25;                            //Inverse Document Frequency : pertinence d'un document pour un term (permet le calcul du score Bm25)
+    private HashMap<Document, Double> bm25Scores;                    //score Bm25 pour chaque document du corpus en rapport avec le terme
+    private double avgDL;                            //la taille moyenne des document
     private double k1 = 1.2;                         
     private double b = 0.75;                         
 
-
+    //constructeur a un elemnt initialise le vocabualire utiliser par celui fournie
     public Bm25(Vocabulary v) {
         super(v);
         this.tf = new HashMap<>();
         this.bm25Scores = new HashMap<>();
     }
 
- 
+    //constructeur par defaut initialise chaque elemenet 
     public Bm25() {
 		super();
 		
@@ -36,9 +29,9 @@ public class Bm25 extends EngineVoc {
 		bm25Scores = new HashMap<Document, Double>();
     }
 
-    
-    private void calcIdf(Corpus c) {
-        this.idf = new double[getVoc().getSize()];
+    // comme pour la classe Tfidf calcul de Idf(inverse document frequencie) remplissnat idfBm25
+    private void calcIdfBm25(Corpus c) {
+        this.idfBm25 = new double[getVoc().getSize()];
         for (Mot m : getVoc().getHashMap().keySet()) {
             int docMotCnt = 0;
             for (int i = 0; i < c.size(); i++) {
@@ -46,12 +39,12 @@ public class Bm25 extends EngineVoc {
                     docMotCnt++;
                 }
             }
-            this.idf[getVoc().getHashMap().get(m)] = Math.log((c.taille(new TailleDocument()) - docMotCnt + 0.5) / (docMotCnt + 0.5) + 1);
+            this.idfBm25[getVoc().getHashMap().get(m)] = Math.log((c.taille(new TailleDocument()) - docMotCnt + 0.5) / (docMotCnt + 0.5) + 1);
         }
     }
 
-    
-    private void calcTf(Corpus c) {
+    //calcul de tf(term frequencie) ,etant la frequence de chaque terme du vocabulaire our chaque document
+    private void calcTfBm25(Corpus c) {
     	this.avgDL = (double) c.taille(new TailleMot()) / c.taille(new TailleDocument());
         for (int i = 0; i < c.taille(new TailleDocument()); i++) {
             double[] vec = new double[getVoc().getSize()];
@@ -69,17 +62,17 @@ public class Bm25 extends EngineVoc {
         }
     }
 
-    
+    //permet l initialisation a partir d un corpus 
     public Bm25 processCorpus(Corpus c) {
         Bm25 finalBm25 = new Bm25(getVoc());
         
         finalBm25.vocabulaire(c);
-        finalBm25.calcTf(c);      
-        finalBm25.calcIdf(c);     
+        finalBm25.calcTfBm25(c);      
+        finalBm25.calcIdfBm25(c);     
         return finalBm25;
     }
 
-   
+   //calcul du score de chaque document pour la rque donne , organise donc les document en foncyion de leur importance 
     private void calcBm25Scores(String request) {
         double[] requestVec = features(request); 
         this.bm25Scores.clear();
@@ -91,7 +84,7 @@ public class Bm25 extends EngineVoc {
             for (int i = 0; i < getVoc().getSize(); i++) {
                 if (requestVec[i] > 0) {
                     double f = tfVec[i];
-                    score += idf[i] * ((f * (k1 + 1)) / (f + k1 * (1 - b + b * (d.size() / avgDL))));
+                    score += idfBm25[i] * ((f * (k1 + 1)) / (f + k1 * (1 - b + b * (d.size() / avgDL))));
                 }
             }
 
@@ -99,7 +92,7 @@ public class Bm25 extends EngineVoc {
         }
     }
 
-    
+    //processQuery permet d'afficher les document par ordre de score grace a la fonction calcbm25
     public void processQuery(String request, int maxDocToShow) {
         calcBm25Scores(request);
 
@@ -124,7 +117,7 @@ public class Bm25 extends EngineVoc {
         }
     }
 
-   
+   // decortique la requete afin de la rechercher
     private double[] features(String request) {
         String[] splittedRequest = request.split(" ");
         double[] vec = new double[getVoc().getSize()];
@@ -145,7 +138,7 @@ public class Bm25 extends EngineVoc {
         return vec;
     }
 
-    
+    //converti le document en un seul string avant de le renvoyer 
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (Document d : bm25Scores.keySet()) {
