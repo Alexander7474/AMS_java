@@ -120,7 +120,7 @@ public class Bm25 {
         }
     }
 
-    /
+    
     private double[] features(String request) {
         String[] splittedRequest = request.split(" ");
         double[] vec = new double[voc.getSize()];
