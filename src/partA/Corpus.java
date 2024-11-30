@@ -5,10 +5,20 @@ import java.io.FileReader;
 import java.util.Vector;
 
 import partB.Taille;
+import partC.EngineVoc;
 
 public class Corpus extends Vector<Document> {
 	private static final long serialVersionUID = 1L;
 	private String title;
+	private EngineVoc engine;
+	
+	public EngineVoc getFeatures(EngineVoc engineToUse) {
+		if(engine == null) {
+			return engineToUse.processCorpus(this);
+		}else {
+			return engine;
+		}
+	}
 
 	public Corpus(String title, DataSets docType) {
 		super();

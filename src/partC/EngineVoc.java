@@ -4,7 +4,7 @@ import partA.Corpus;
 
 public abstract class EngineVoc {
 	private Vocabulary voc;
-	
+		
 	public abstract EngineVoc processCorpus(Corpus c);
 	public abstract void processQuery(String request, int maxDocToShow);
 	

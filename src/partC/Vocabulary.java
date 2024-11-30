@@ -8,7 +8,7 @@ import partA.*;
 public class Vocabulary {
 	private static boolean alreadyExist = false;
 	private HashMap<Mot, Integer> map;
-	private HashSet<Mot> set;
+	private HashSet<Mot> stopList;
 	
 	public static Vocabulary createVocabulary() {
 		if(! alreadyExist) {
@@ -22,7 +22,7 @@ public class Vocabulary {
 	
 	private Vocabulary() {
 		map = new HashMap<Mot, Integer>();
-		set = new HashSet<Mot>();
+		stopList = new HashSet<Mot>();
 	}
 	
 	public void addCorpus(Corpus c) {
