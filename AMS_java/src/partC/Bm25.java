@@ -5,6 +5,7 @@ import partA.*;
 import partB.*;
 import partE.Bm25Exc;
 import partE.MoteurRechercheExc;
+import partE.TfidfExc;
 
 
 
@@ -32,7 +33,12 @@ public class Bm25 extends EngineVoc {
     }
 
     // comme pour la classe Tfidf calcul de Idf(inverse document frequencie) remplissnat idfBm25
-    private void calcIdfBm25(Corpus c) {
+    private void calcIdfBm25(Corpus c) throws MoteurRechercheExc {
+    	if(c==null) {
+			throw new Bm25Exc("the corpus dosn t exist");
+		}else if(c.size()==0) {
+			throw new Bm25Exc("the corpus is empty");
+		}
         this.idfBm25 = new double[getVoc().getSize()];
         for (Mot m : getVoc().getHashMap().keySet()) {
             int docMotCnt = 0;
@@ -46,7 +52,12 @@ public class Bm25 extends EngineVoc {
     }
 
     //calcul de tf(term frequencie) ,etant la frequence de chaque terme du vocabulaire our chaque document
-    private void calcTfBm25(Corpus c) {
+    private void calcTfBm25(Corpus c) throws MoteurRechercheExc {
+    	if(c==null) {
+			throw new Bm25Exc("the corpus dosn t exist");
+		}else if(c.size()==0) {
+			throw new Bm25Exc("the corpus is empty");
+		}
     	this.avgDL = (double) c.taille(new TailleMot()) / c.taille(new TailleDocument());
         for (int i = 0; i < c.taille(new TailleDocument()); i++) {
             double[] vec = new double[getVoc().getSize()];
@@ -65,7 +76,7 @@ public class Bm25 extends EngineVoc {
     }
 
     //permet l initialisation a partir d un corpus 
-    public Bm25 processCorpus(Corpus c) {
+    public Bm25 processCorpus(Corpus c) throws MoteurRechercheExc {
         Bm25 finalBm25 = new Bm25(getVoc());
         
         finalBm25.vocabulaire(c);
@@ -92,6 +103,7 @@ public class Bm25 extends EngineVoc {
 
             bm25Scores.put(d, score);
         }
+        
     }
 
     //processQuery permet d'afficher les document par ordre de score grace a la fonction calcbm25
@@ -143,7 +155,7 @@ public class Bm25 extends EngineVoc {
         return vec;
     }
 
-    //converti le document en un seul string avant de le renvoyer 
+    //converti chacun des documents en string avant de les renvoyer 
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (Document d : bm25Scores.keySet()) {
@@ -152,7 +164,7 @@ public class Bm25 extends EngineVoc {
         return result.toString();
     }
     
-	public Bm25 processCorpusWithStopList(Corpus c,StopList stopList) {
+	public Bm25 processCorpusWithStopList(Corpus c,StopList stopList) throws MoteurRechercheExc {
 		Bm25 bm25 = new Bm25(getVoc());
 		
 		bm25.vocabulaireWithStopList(c, stopList);
