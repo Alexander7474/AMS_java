@@ -4,6 +4,15 @@ import partA.*;
 import partB.*;
 import partC.*;
 
+/**
+ * @author Yassine EL MSEBLI
+ */
+
+/**
+ * @brief test l'exception Bm25Exc verifiant l exstance de la requete
+
+ */
+
 public class Bm25ExcTest {
 	public static void Bm25test(String args) throws MoteurRechercheExc {
 		Corpus c = new Corpus("src/booksummaries_sample.txt", DataSets.BOOK);

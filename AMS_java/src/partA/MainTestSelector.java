@@ -3,6 +3,14 @@ package partA;
 import partE.*;
 import java.util.Scanner;
 
+/**
+ * @author Yassine EL MSEBLI
+ */
+
+/**
+ * @brief permet de tester les deux type de recherche , et les exctions possible
+
+ */
 public class MainTestSelector {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

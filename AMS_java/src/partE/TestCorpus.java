@@ -4,6 +4,14 @@ import partA.*;
 import partB.*;
 import partC.*;
 
+/**
+ * @author Yassine EL MSEBLI
+ */
+
+/**
+ * @brief test l'exception CorpusExc verifiant l existence du ficher et qu il ne soit pas vide
+
+ */
 public class TestCorpus {
 	public static void Corpustest(String args) throws MoteurRechercheExc {
 		Corpus c = null ;

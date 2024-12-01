@@ -4,6 +4,14 @@ import partA.*;
 import partB.*;
 import partC.*;
 
+/**
+ * @author Yassine EL MSEBLI
+ */
+
+/**
+ * @brief verfie l existence du corpus c et qu il est au moin un document
+
+ */
 public class TfidfExcTest {
 	public static void Tfidftest(String args) throws MoteurRechercheExc {
 		Corpus c= new Corpus("src/booksummaries_sample.txt", DataSets.BOOK);
