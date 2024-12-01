@@ -1,34 +1,34 @@
 package partE;
 
 import partA.*;
-
 import partB.*;
 import partC.*;
-import partE.*;
 
 public class Bm25ExcTest {
-    public static void main(String[] args) throws MoteurRechercheExc {
-    	Corpus c = null ;
-    	
-    	try {
-	        c = new Corpus("src/booksummaries_sample.txt", DataSets.BOOK);
-	    } catch (CorpusExc ce) { 
-	        System.err.println("caught corpusExc: " + ce.getMessage());
-	    }
-    	
+	public static void Bm25test(String args) throws MoteurRechercheExc {
+		Corpus c = new Corpus("src/booksummaries_sample.txt", DataSets.BOOK);
 
-        
-        Bm25 bm25 = new Bm25();
-        
-        String query = "The story is presented by Le Fanu";
-        int maxDocsToShow = 3;
-
-        System.out.println("Top " + maxDocsToShow + " Documents:");
-        try {
-        	bm25.processQuery(query, maxDocsToShow);
-        }catch(Bm25Exc cd){
-        	System.err.println("Bm25 Bm25Exc: " + cd.getMessage());
-        }
-        
-    }
+		Bm25 B = new Bm25();
+		StopList stpL = new StopList("src/stopWords.txt");
+		
+		long start = System.nanoTime();
+		Bm25 Bmstp = B.processCorpus(c, stpL);
+		long end = System.nanoTime();
+		System.out.println("Temps de proces du corpus STOP LIST :" + ((end-start)*(Math.pow(10, -9))));
+		
+		start = System.nanoTime();
+		
+		try {
+			Bmstp.processQuery("", 1);
+		}catch(Bm25Exc cd){
+			throw new Bm25Exc("the request is null or do not exist");
+		}
+		
+		Bmstp.processQuery("Beginning several months after the events in Blade Runner", 1);
+		Bmstp.processQuery("Wells grows up in an orphanage where he spends his childhood", 1);
+		end = System.nanoTime();
+		
+		System.out.println("Temps de proces query STOP LIST :" + ((end-start)*(Math.pow(10, -9))));
+		System.out.println(B.getVoc().getSize());
+	}
 }

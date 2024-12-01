@@ -1,5 +1,8 @@
 package partA;
 
+/**
+ * @author Alexandre LANTERNIER
+ */
 public enum DataSets {
 	WIKIPEDIA("Wikipedia summary"),
 	BOOK("Book summary");
@@ -14,3 +17,4 @@ public enum DataSets {
 		return nom;
 	}
 }
+

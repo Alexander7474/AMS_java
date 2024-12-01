@@ -4,21 +4,20 @@ import partA.*;
 import partB.*;
 import partC.*;
 
-public class TfidfExcTest {
-	public static void Tfidftest(String args) throws MoteurRechercheExc {
-		Corpus c= new Corpus("src/booksummaries_sample.txt", DataSets.BOOK);
+public class TestCorpus {
+	public static void Corpustest(String args) throws MoteurRechercheExc {
+		Corpus c = null ;
+		try {
+			c=new Corpus("src/booksummaries_sample.txt", DataSets.BOOK);
+		}catch(CorpusExc cd) {
+			throw new CorpusExc ("the file do not exist or is empty");
+		}
 				
 		TfIdf t = new TfIdf();
 		StopList stpL = new StopList("src/stopWords.txt");
 		
 		long start = System.nanoTime();
-		TfIdf tfStopList=null; 
-		try {
-			tfStopList= t.processCorpus(c, stpL);
-		}catch(TfidfExc tf) {
-			throw new TfidfExc("the corpus is empty or do not exist");
-		}
-		
+		TfIdf tfStopList = t.processCorpus(c, stpL);
 		long end = System.nanoTime();
 		System.out.println("Temps de proces du corpus STOP LIST :" + ((end-start)*(Math.pow(10, -9))));
 		

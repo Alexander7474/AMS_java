@@ -7,11 +7,18 @@ import partB.TailleDocument;
 import partE.MoteurRechercheExc;
 import partE.TfidfExc;
 
+/**
+ * @author Alexandre LANTERNIER
+ */
 public class TfIdf extends EngineVoc{
 	private HashMap<Document, double[]> tf;
 	private double[] idf;
 	private HashMap<Document, double[]> tfIdf;
 	
+	/**
+	 * @brief Créer Tfidf avec un vocabulaire
+	 * @param v
+	 */
 	private TfIdf(Vocabulary v) {
 		super(v);
 		
@@ -19,6 +26,9 @@ public class TfIdf extends EngineVoc{
 		tfIdf = new HashMap<Document, double[]>();
 	}
 	
+	/**
+	 * @brief Créer Tfidf sans un vocabulaire
+	 */
 	public TfIdf() {
 		super();
 		
@@ -26,8 +36,11 @@ public class TfIdf extends EngineVoc{
 		tfIdf = new HashMap<Document, double[]>();
 	}
 	
+	/**
+	 * @brief calcule le poid idf des mots dans le vocabulaire 
+	 * @param c
+	 */
 	private void calcIdf(Corpus c) {
-		
 		this.idf = new double[getVoc().getSize()];	
 		
 		for(Mot m : getVoc().getHashMap().keySet()) {
@@ -43,8 +56,11 @@ public class TfIdf extends EngineVoc{
 		
 	}
 	
+	/**
+	 * @brief calcule le poid tf des mots de chaque document
+	 * @param c
+	 */
 	private void calcTf(Corpus c) {
-
 		for(int i = 0; i < c.taille(new TailleDocument()); i++) {
 			double[] vec = new double[getVoc().getHashMap().size()];
 			for(Mot m : getVoc().getHashMap().keySet()) {
@@ -63,6 +79,9 @@ public class TfIdf extends EngineVoc{
 		}
 	}
 	
+	/**
+	 * @brief calcule le poid tfidf de chaque mots
+	 */
 	private void calcTfIdf() {
 		for(Document d : tf.keySet()) {
 			double[] tfIdfVec = new double[getVoc().getSize()];
@@ -73,12 +92,14 @@ public class TfIdf extends EngineVoc{
 		}
 	}
 	
+	/**
+	 * @throws MoteurRechercheExc 
+	 * @brief Créé une instance de TfIdf avec un corpus
+	 */
 	public TfIdf processCorpus(Corpus c) throws MoteurRechercheExc {
 		TfIdf finalTfIdf = new TfIdf(getVoc());
-		if(c==null) {
-			throw new TfidfExc("the corpus dosn t exist");
-		}else if(c.taille(new TailleDocument())==0) {
-			throw new TfidfExc("the corpus is empty");
+		if(c==null || c.taille(new TailleDocument())==0) {
+			throw new TfidfExc("the corpus do not exist or is empty");
 		}
 		finalTfIdf.vocabulaire(c);
 		finalTfIdf.calcTf(c);
@@ -88,10 +109,13 @@ public class TfIdf extends EngineVoc{
 		return finalTfIdf;
 	}
 	
-	public void processQuery(String request, int maxDocToShow) throws MoteurRechercheExc {
-		if(request==null) {
-			throw new TfidfExc("request = null");
-		}
+	/**
+	 * @brief Détermine les document les plus pertinent pour contenir les mots de la requête
+	 * @param request
+	 * @param maxDocToShow
+	 * @return
+	 */
+	public void processQuery(String request, int maxDocToShow) {
 		double[] requestVec = features(request);
 		double[] requestTfIdfVec = new double[getVoc().getSize()];
 		for(int i = 0; i < getVoc().getSize(); i++) {
@@ -132,9 +156,7 @@ public class TfIdf extends EngineVoc{
 				}
 				
 			}
-			if(docToShow==null) {
-				throw new TfidfExc("the doc do not exist");
-			}
+			
 			System.out.println("Document " + i + ":\n");
 			System.out.println(docToShow);
 			System.out.println("\n");
@@ -143,6 +165,11 @@ public class TfIdf extends EngineVoc{
 		
 	}
 	
+	/**
+	 * @brief détermien le poid tf de chaque mot de la requête
+	 * @param request
+	 * @return
+	 */
 	private double[] features(String request) {
 		//on sépare la requete
 		String[] splittedRequest = request.split(" ");
@@ -172,4 +199,25 @@ public class TfIdf extends EngineVoc{
 		return finalStr;
 	}
 	
+	/**
+	 * @brief Créé une instance de TfIdf avec un corpus et une stoplist
+	 * @param c
+	 * @param stopList
+	 * @return
+	 * @throws MoteurRechercheExc 
+	 */
+	public TfIdf processCorpus(Corpus c,StopList stopList) throws MoteurRechercheExc {
+		TfIdf finalTfIdf = new TfIdf(getVoc());
+		if(c==null || c.taille(new TailleDocument())==0) {
+			throw new TfidfExc("the corpus do not exist or is empty");
+		}
+		finalTfIdf.vocabulaire(c, stopList);
+		finalTfIdf.calcTf(c);
+		finalTfIdf.calcIdf(c);
+		finalTfIdf.calcTfIdf();
+		
+		return finalTfIdf;
+	}
+	
 }
+
