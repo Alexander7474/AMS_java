@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import partA.*;
 import partB.TailleDocument;
+import partE.MoteurRechercheExc;
+import partE.TfidfExc;
 
 /**
  * @author Alexandre LANTERNIER
@@ -91,11 +93,14 @@ public class TfIdf extends EngineVoc{
 	}
 	
 	/**
+	 * @throws MoteurRechercheExc 
 	 * @brief Créé une instance de TfIdf avec un corpus
 	 */
-	public TfIdf processCorpus(Corpus c) {
+	public TfIdf processCorpus(Corpus c) throws MoteurRechercheExc {
 		TfIdf finalTfIdf = new TfIdf(getVoc());
-		
+		if(c==null || c.taille(new TailleDocument())==0) {
+			throw new TfidfExc("the corpus do not exist or is empty");
+		}
 		finalTfIdf.vocabulaire(c);
 		finalTfIdf.calcTf(c);
 		finalTfIdf.calcIdf(c);
@@ -199,10 +204,13 @@ public class TfIdf extends EngineVoc{
 	 * @param c
 	 * @param stopList
 	 * @return
+	 * @throws MoteurRechercheExc 
 	 */
-	public TfIdf processCorpus(Corpus c,StopList stopList) {
+	public TfIdf processCorpus(Corpus c,StopList stopList) throws MoteurRechercheExc {
 		TfIdf finalTfIdf = new TfIdf(getVoc());
-		
+		if(c==null || c.taille(new TailleDocument())==0) {
+			throw new TfidfExc("the corpus do not exist or is empty");
+		}
 		finalTfIdf.vocabulaire(c, stopList);
 		finalTfIdf.calcTf(c);
 		finalTfIdf.calcIdf(c);
@@ -212,3 +220,4 @@ public class TfIdf extends EngineVoc{
 	}
 	
 }
+

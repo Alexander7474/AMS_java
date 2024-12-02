@@ -1,12 +1,14 @@
 package partA;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.Vector;
 
 import partB.Taille;
 import partC.EngineVoc;
 import partC.StopList;
+import partE.*;
 
 /**
  * @author Alexandre LANTERNIER
@@ -20,8 +22,9 @@ public class Corpus extends Vector<Document> {
 	 * @brief renvoie un moteur de recherche de la class donné en param pour chercher dans le corpus
 	 * @param engineToUse
 	 * @return
+	 * @throws MoteurRechercheExc 
 	 */
-	public EngineVoc getFeatures(EngineVoc engineToUse) {
+	public EngineVoc getFeatures(EngineVoc engineToUse) throws MoteurRechercheExc {
 		if(engine == null) {
 			return engineToUse.processCorpus(this);
 		}else {
@@ -34,8 +37,9 @@ public class Corpus extends Vector<Document> {
 	 * @param engineToUse
 	 * @param stopList
 	 * @return
+	 * @throws MoteurRechercheExc 
 	 */
-	public EngineVoc getFeatures(EngineVoc engineToUse, StopList stopList) {
+	public EngineVoc getFeatures(EngineVoc engineToUse, StopList stopList) throws MoteurRechercheExc {
 		if(engine == null) {
 			return engineToUse.processCorpus(this, stopList);
 		}else {
@@ -47,11 +51,21 @@ public class Corpus extends Vector<Document> {
 	 * @brief Constructeur qui créer des document a partir d'un fichier txt pourt constituer le corpus
 	 * @param title
 	 * @param docType
+	 * @throws MoteurRechercheExc 
 	 */
-	public Corpus(String title, DataSets docType) {
+	public Corpus(String title, DataSets docType) throws MoteurRechercheExc {
 		super();
 		this.title = title;
-		
+		if(title==null) {
+			throw new CorpusExc("the title do not exist");
+		}
+		File file = new File(title);
+		if (!file.exists() || !file.isFile()) {
+		    throw new CorpusExc("the file does not exist: " + title);
+		}else if(file.length()==0) {
+			throw new CorpusExc("the file is empty: " + title);
+		}
+
 		String separator;
 		int p1;
 		int p2;
@@ -141,3 +155,4 @@ public class Corpus extends Vector<Document> {
 	}
 	
 }
+

@@ -1,6 +1,7 @@
 package partC;
 
 import partA.Corpus;
+import partE.MoteurRechercheExc;
 
 /**
  * @brief superclass de bm25 et TfIdf
@@ -9,9 +10,9 @@ import partA.Corpus;
 public abstract class EngineVoc {
 	private Vocabulary voc;
 		
-	public abstract EngineVoc processCorpus(Corpus c);
-	public abstract EngineVoc processCorpus(Corpus c,StopList stopList);
-	public abstract void processQuery(String request, int maxDocToShow);
+	public abstract EngineVoc processCorpus(Corpus c) throws MoteurRechercheExc;
+	public abstract EngineVoc processCorpus(Corpus c,StopList stopList) throws MoteurRechercheExc;
+	public abstract void processQuery(String request, int maxDocToShow) throws MoteurRechercheExc;
 	
 	/**
 	 * @brief Créé le moteur avec un vocabulaire déjà existant
