@@ -1,7 +1,9 @@
 package partA;
 
-import partE.*;
 import java.util.Scanner;
+
+import partE.*;
+import test.*;
 
 /**
  * @author Yassine EL MSEBLI
@@ -23,7 +25,6 @@ public class MainTestSelector {
         System.out.println("5  Bm25 Test");
         System.out.println("6  Bm25stoplis test");
         System.out.println("7  TfidfStoplist");
-
         
         int choice = scanner.nextInt();
         
