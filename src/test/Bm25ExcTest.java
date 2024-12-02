@@ -27,7 +27,6 @@ public class Bm25ExcTest {
 		long end = System.nanoTime();
 		System.out.println("Temps de proces du corpus STOP LIST :" + ((end-start)*(Math.pow(10, -9))));
 		
-		start = System.nanoTime();
 		
 		try {
 			Bmstp.processQuery("", 1);
@@ -35,11 +34,6 @@ public class Bm25ExcTest {
 			throw new Bm25Exc("the request is null or do not exist");
 		}
 		
-		Bmstp.processQuery("Beginning several months after the events in Blade Runner", 1);
-		Bmstp.processQuery("Wells grows up in an orphanage where he spends his childhood", 1);
-		end = System.nanoTime();
-		
-		System.out.println("Temps de proces query STOP LIST :" + ((end-start)*(Math.pow(10, -9))));
-		System.out.println(B.getVoc().getSize());
+
 	}
 }
